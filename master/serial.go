@@ -58,13 +58,13 @@ func (m *Master) SendRaw(command string) error {
 	return err
 }
 
-func (m *Master) SendCommand(id string, commandId string, args string) {
+func (m *Master) SendCommand(id string, commandId string, args string) error {
 	command := fmt.Sprintf("!%s%s%s#", commandId, zeroPad(id, 3), args)
 
-	m.SendRaw(command)
+	return m.SendRaw(command)
 }
 
-func (m *Master) SendDirect(id string, color panel.Color) {
+func (m *Master) SendDirect(id string, color panel.Color) error {
 	args := fmt.Sprintf(
 		"%s%s%s",
 		zeroPad(strconv.Itoa(int(color.R)), 3),
@@ -72,5 +72,5 @@ func (m *Master) SendDirect(id string, color panel.Color) {
 		zeroPad(strconv.Itoa(int(color.B)), 3),
 	)
 
-	m.SendCommand(id, "1", args)
+	return m.SendCommand(id, "1", args)
 }

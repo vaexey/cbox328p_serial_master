@@ -17,20 +17,31 @@ func main() {
 
 	m.Load("master.json")
 	m.Save("master.json")
+	m.GenerateIndex()
 
 	err := m.OpenSerial()
 
 	fmt.Println(err)
 
+	go updateLoop(&m)
+
 	for {
 		for i := 0; i < 360; i++ {
 			r, g, b, _ := colorconv.HSLToRGB(float64(i), 1, 0.5)
 
-			m.SendDirect("0", panel.Color{
-				R: float32(r), G: float32(g), B: float32(b),
+			m.FindPanel("1").Set(panel.Color{
+				R: float32(r) / 255, G: float32(g) / 255, B: float32(b) / 255,
 			})
 
 			time.Sleep(10 * time.Millisecond)
 		}
+	}
+}
+
+func updateLoop(m *master.Master) {
+	for {
+		m.SendDirtyPanels()
+
+		time.Sleep(10 * time.Millisecond)
 	}
 }

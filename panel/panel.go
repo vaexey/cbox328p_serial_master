@@ -22,6 +22,8 @@ type Panel struct {
 
 	ColorScale int `json:"colorScale"` // Maximum value for color component (default 255)
 
-	rawColor     Color // Raw color currently set on panel (after color correction and normalization to 0-255)
+	RawColor     Color `json:"-"`            // Raw color currently set on panel (after color correction and normalization to 0-255)
 	CurrentColor Color `json:"currentColor"` // Color currently set on panel (range 0-1)
+
+	Dirty bool `json:"-"` // Whether panel color has been changed and not yet sent
 }
